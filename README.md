@@ -29,7 +29,7 @@ Para cada caso, ¿el paciente está cursando un ACV?
 
 Objetivo: Identificar oportunamente a los pacientes que están cursando un ACV para que puedan recibir una derivación urgente a tomografía y evitar que pierdan la ventana de tratamiento. Se busca priorizar la detección de los casos reales, reduciendo principalmente los falsos negativos, sin generar una cantidad excesiva de derivaciones innecesarias.
 
-Métrica: La métrica principal es la sensibilidad (VP / (VP + FN)), porque un falso negativo es el error más costoso según la ficha. . Como control usamos la especificidad (VN / (VN + FP)),  dice qué parte de los pacientes sin ACV no se manda a tomografía, para no ocupar el tomógrafo de más. También utilizamos precisión (VP / (VP + FN), para ver de los que el sistema marca que si y se hicieron la tomografía, cuantos tenían una ACV.
+Métrica: La métrica principal es la sensibilidad (VP / (VP + FN)), porque un falso negativo es el error más costoso según la ficha. . Como control usamos la especificidad (VN / (VN + FP)),  dice qué parte de los pacientes sin ACV no se manda a tomografía, para no ocupar el tomógrafo de más. También utilizamos precisión (VP / (VP + FP), para ver de los que el sistema marca que si y se hicieron la tomografía, cuantos tenían una ACV.
 
 La métrica y el objetivo no son lo mismo pero tienen una relación de causalidad entre sí, porque el objetivo define qué queremos lograr y la métrica nos permite medir si estamos alcanzándolo. En nuestro caso, el objetivo es detectar la mayor cantidad posible de pacientes que estén cursando un ACV, priorizando evitar los falsos negativos, y la sensibilidad es la métrica principal que utilizamos para evaluar si el sistema cumple con ese objetivo.
 
@@ -86,9 +86,9 @@ En colab, para probar un caso nuevo, podes modificar los valores de Asimetría f
 | Sensibilidad | 83.3% | 100.00% |
 | Especificidad | 75.0% | 50.0% |
 
-**Entrenamiento contra prueba.** <¿Hay diferencia? ¿Por qué? ¿Sobreajuste o generalización?>
+**Entrenamiento contra prueba.**
 Si, hay diferencia entre entrenamiento y prueba ya que durante la prueba suben todas las métricas en comparación al entrenamiento, excepto la especificidad, porque, de los 2 pacientes que no presentan ACV, uno fue una falsa alarma.
-Al tener solamente 6 casos de prueba esto hace que, como solo hay un mal resultado, la especificidad baja un 25%.
+Al tener solamente 6 casos de prueba esto hace que, como solo hay un mal resultado, la especificidad baja un 25%. Por lo tanto, no podemos afirmar que exista una mejor generalización ni descartar un posible sobreajuste con una muestra tan pequeña.
 
 ## 4. El error más caro
 El falso negativo es el error más grave, porque implica no detectar a un paciente que realmente está cursando un ACV, lo que podría retrasar su atención y hacerle perder la ventana de tratamiento. En cambio, un falso positivo puede generar una tomografía innecesaria y ocupar recursos hospitalarios.
@@ -136,10 +136,9 @@ Por estos motivos, el sistema debe considerarse un ejercicio académico y no una
 | 2 | Métrica y Objetivo | Aceptamos el objetivo de Mastronardi porque se alinea con las bases de un proyecto de salud, también la explicación de la relación entre ambos conceptos, al alinearse con la idea de la cátedra | Rechazamos métrica Matronardi y usamos la de Villamil porque hace énfasis en el peso del falso negativo| 
 | 3 | Formula de la neurona a partir de los casos de entrenamiento | La versión de Villamil porque los parámetros eran más pequeños y nos resultó más cómodo | La versión de Mastronardi porque ambas tenian la misma sensibilidad, la cual es la métrica más importante en nuestro caso. |
 | 4 | Realizar la planilla de los casos de entrenamiento con la fórmula, la cual completó los resultados a partir de las cuentas | El código para Colab al ejecutarse correctamente y aportarnos las métricas necesarias. Lo usamos como primera prueba o intento. | Rechazamos la primer versión que nos dió porque las métricas estaban demasiado sesgadas para la exactitud, se ajustaba demasiado al conjunto de datos que proporcionamos y nos dió 100% en cada métrica al entrenar y probar los datos. No es aceptable.
-| 5 | 
 
 **Corridas contra el evaluador**
 
 | Corrida | Nota | Agujero que encontró | Qué cambiamos |
 |---|---|---|---|
-| 1 | <> | <> | <> |
+| 1 | 8 |	Fórmulas inconsistentes, falta responder sobre generalización y no se justificó qué cambio permitiría detectar el caso 6.	|Unificamos la fórmula, corregimos la precisión, completamos la sección 3 y analizamos el efecto de modificar el umbral, pero no lo hicimos porque priorizamos mantener el modelo original y evitar optimizarlo solamente para los datos de entrenamiento
