@@ -43,16 +43,18 @@ Elegimos esta alternativa porque nuestro problema consiste en clasificar casos e
 
 La neurona recibe tres variables de entrada y le asigna un peso a cada una, que representa su importancia dentro del cálculo. Luego multiplica cada valor por su peso, suma los resultados y agrega un sesgo (bias).
 
-**Variables que usa y por qué.** <Cuáles usa, cuáles descarta y por qué.>
+**Variables que usa y por qué.**
+n=3F+B+3H-10
+Usa las tres variables de la ficha porque están disponibles antes de la decisión y describen signos observados en el paciente. No descarta ninguna. Los pesos \(3\), \(1\) y \(3\) son una elección para estos datos inventados.
 
-**Cómo se corre en vivo.** <Pasos concretos para resolver un caso nuevo: link al Colab, a la planilla o la cuenta a mano.>
-
+**Cómo se corre en vivo.**
+En colab, para probar un caso nuevo, podes modificar los valores de Asimetría facial (escala 0 a 3), Debilidad en un brazo (escala 0 a 4), Dificultad para hablar (escala 0 a 3), así la neurona predice el resultado.
 **Dos casos de ejemplo.**
 
 | Caso inventado | Valores | Salida del sistema |
 |---|---|---|
-| A | <…> | <SÍ/NO> |
-| B | <…> | <SÍ/NO> |
+| A | 2, 2, 2 (3·2 + 1·2 + 3·2 + (-10) = 4)  | SÍ |
+| B | 1, 2, 1	(3·1 + 1·2 + 3·1 + (-10) = -2) | NO |
 
 ## 3. Medición
 
@@ -60,22 +62,22 @@ La neurona recibe tres variables de entrada y le asigna un peso a cada una, que 
 
 | | Predice SÍ | Predice NO |
 |---|---|---|
-| **Real SÍ** | VP = <> | FN = <> |
-| **Real NO** | FP = <> | VN = <> |
+| **Real SÍ** | VP = 5 | FN = 1 |
+| **Real NO** | FP = 2 | VN = 6 |
 
 **Prueba (casos 15–20)**
 
 | | Predice SÍ | Predice NO |
 |---|---|---|
-| **Real SÍ** | VP = <> | FN = <> |
-| **Real NO** | FP = <> | VN = <> |
+| **Real SÍ** | VP = 4 | FN = 0 |
+| **Real NO** | FP = 1 | VN = 1 |
 
 | Métrica | Entrenamiento | Prueba |
 |---|---|---|
-| Exactitud | <> | <> |
-| Precisión | <> | <> |
-| Sensibilidad | <> | <> |
-| Especificidad | <> | <> |
+| Exactitud | 78.6% | 83.3% |
+| Precisión | 71.4% | 80.0% |
+| Sensibilidad | 83.3% | 100.00% |
+| Especificidad | 75.0% | 50.0% |
 
 **Entrenamiento contra prueba.** <¿Hay diferencia? ¿Por qué? ¿Sobreajuste o generalización?>
 
