@@ -1,30 +1,47 @@
-# <Código> · <Título de su problemática>
+# M27 · ¿Tomografía urgente por sospecha de ACV? · Neurología y Salud.
 
-> **Hackatón IIA · UADE · 3.4.257.** Este README es la plantilla del grupo. En su fork, reemplacen todo lo que está entre `< >` y borren esta nota. Las bases están en `BASES.md` y su ficha en `problematicas/`.
+> **Hackatón IIA · UADE · 3.4.257.** L
 
-**Integrantes:** <nombre y apellido> · <nombre y apellido>
-**IA declarada:** <la del grupo desde la Clase 1>
-**Pista:** <Neurona / Reglas / Agente>
+**Integrantes:** Milena Iris Mastronardi · Tomás Villamil
+**IA declarada:** Chat GPT
+**Pista:** Neurona
 **Publicación en LinkedIn:** <link>
 
 ---
 
 ## 1. Formulación y PEAS
 
-**La pregunta.** <Para cada caso, ¿…? SÍ significa: …>
+**La pregunta:**
+Para cada caso, ¿el paciente está cursando un ACV?
+
+**SÍ** significa que el paciente está cursando un accidente cerebrovascular (ACV) y requiere una derivación a tomografía urgente.
+
+**NO** significa que el paciente no está cursando un ACV y continúa con el triage habitual.
 
 | PEAS | Su sistema |
 |---|---|
-| Medida de rendimiento | <cómo se sabe si decidió bien> |
-| Entorno | <dónde y con qué decide> |
-| Actuadores | <qué hace con la decisión> |
-| Sensores | <qué datos recibe> |
+| Medida de rendimiento | Identificar correctamente a los pacientes que están cursando un ACV, priorizando la detección de los casos reales y minimizando los falsos negativos. También se busca evitar una cantidad excesiva de falsos positivos que generen estudios innecesarios y ocupen recursos hospitalarios |
+| Entorno |Guardia de un hospital. Incluye pacientes que presentan posibles síntomas neurológicos, profesionales de salud, el sistema informático de triage y la disponibilidad del tomógrafo.|
+| Actuadores | Marcar al paciente como SÍ (tomografía urgente) o NO (sigue el triage habitual) y avisar al médico de guardia para que lo confirme. |
+| Sensores | Asimetría facial (escala 0 a 3), debilidad en un brazo (escala 0 a 4) y dificultad para hablar (escala 0 a 3).|
 
-**Objetivo y métrica.** <Qué es lo que de verdad importa en su problema y con qué métrica lo van a medir. ¿Son lo mismo?>
+**Objetivo y métrica.** 
+
+Objetivo: Identificar oportunamente a los pacientes que están cursando un ACV para que puedan recibir una derivación urgente a tomografía y evitar que pierdan la ventana de tratamiento. Se busca priorizar la detección de los casos reales, reduciendo principalmente los falsos negativos, sin generar una cantidad excesiva de derivaciones innecesarias.
+
+Métrica: La métrica principal es la sensibilidad (VP / (VP + FN)), porque un falso negativo es el error más costoso según la ficha. . Como control usamos la especificidad (VN / (VN + FP)),  dice qué parte de los pacientes sin ACV no se manda a tomografía, para no ocupar el tomógrafo de más. También utilizamos precisión (VP / (VP + FN), para ver de los que el sistema marca que si y se hicieron la tomografía, cuantos tenían una ACV.
+
+La métrica y el objetivo no son lo mismo pero tienen una relación de causalidad entre sí, porque el objetivo define qué queremos lograr y la métrica nos permite medir si estamos alcanzándolo. En nuestro caso, el objetivo es detectar la mayor cantidad posible de pacientes que estén cursando un ACV, priorizando evitar los falsos negativos, y la sensibilidad es la métrica principal que utilizamos para evaluar si el sistema cumple con ese objetivo.
+
 
 ## 2. El sistema
 
-**Cómo decide.** <Neurona: pesos y sesgo. Reglas: la lista de reglas si‑entonces. Agente: la regla con la que elige la acción.>
+**Cómo decide.**
+El sistema utiliza una neurona artificial simple, también llamada perceptrón, para realizar una clasificación binaria: SÍ o NO.
+
+Elegimos esta alternativa porque nuestro problema consiste en clasificar casos en dos categorías a partir de tres variables numéricas. El perceptrón permite aprender de los ejemplos de entrenamiento y utilizar lo aprendido para clasificar nuevos casos.
+
+La neurona recibe tres variables de entrada y le asigna un peso a cada una, que representa su importancia dentro del cálculo. Luego multiplica cada valor por su peso, suma los resultados y agrega un sesgo (bias).
 
 **Variables que usa y por qué.** <Cuáles usa, cuáles descarta y por qué.>
 
@@ -87,7 +104,9 @@
 
 | # | Qué le pedimos | Qué aceptamos | Qué rechazamos y por qué |
 |---|---|---|---|
-| 1 | <> | <> | <> |
+| 1 | Una guía sobre el PEAS | Aceptamos parcialmente la respuesta de la IA de Mastronardi tras compararlas| Rechazamos las clasificaciones del entorno y Actuators, adoptamos la versión de Villamil al definir con más precisión lo que debe hacer la neurona|
+| 2 | Métrica y Objetivo | Aceptamos el objetivo de Mastronardi porque se alinea con las bases de un proyecto de salud, también la explicación de la relación entre ambos conceptos, al alinearse con la idea de la cátedra | Rechazamos métrica Matronardi y usamos la de Villamil porque hace énfasis en el peso del falso negativo| 
+| 3 | Crear el sistema | 
 
 **Corridas contra el evaluador**
 
