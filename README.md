@@ -144,3 +144,4 @@ Por estos motivos, el sistema debe considerarse un ejercicio académico y no una
 | 1 | 8 |	Fórmulas inconsistentes, falta responder sobre generalización y no se justificó qué cambio permitiría detectar el caso 6.	|Unificamos la fórmula, corregimos la precisión, completamos la sección 3 y analizamos el efecto de modificar el umbral, pero no lo hicimos porque priorizamos mantener el modelo original y evitar optimizarlo solamente para los datos de entrenamiento
 | 2 | 9 | Solamente nos indica el mismo error de modificar el umbral. Además, no vió la corrección del Colab porque no la cargamos | No cambiamos nada porque lo volvimos a subir.
 | 3 | 9 | Nos señala que no actualizamos la corrida 2 porque solo subimos el Colab ahora | Completamos la bitácora.
+| 4 | 9.5 | Señala el mismo error de umbral | No realizamos cambios porque nuestro modelo demostró un buen desempeño.
