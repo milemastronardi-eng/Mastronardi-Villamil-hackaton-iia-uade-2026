@@ -47,6 +47,13 @@ La neurona recibe tres variables de entrada y le asigna un peso a cada una, que 
 n=3F+B+3H-10
 Usa las tres variables de la ficha porque están disponibles antes de la decisión y describen signos observados en el paciente. No descarta ninguna. Los pesos \(3\), \(1\) y \(3\) son una elección para estos datos inventados.
 
+- \(F\): asimetría facial.
+- \(B\): debilidad en un brazo.
+- \(H\): dificultad para hablar.
+- Pesos: 3, 1 y 3.
+- Sesgo: −10.
+- Si \(n\geq0\), predice SÍ; si \(n<0\), predice NO.
+
 **Cómo se corre en vivo.**
 En colab, para probar un caso nuevo, podes modificar los valores de Asimetría facial (escala 0 a 3), Debilidad en un brazo (escala 0 a 4), Dificultad para hablar (escala 0 a 3), así la neurona predice el resultado.
 **Dos casos de ejemplo.**
@@ -80,25 +87,44 @@ En colab, para probar un caso nuevo, podes modificar los valores de Asimetría f
 | Especificidad | 75.0% | 50.0% |
 
 **Entrenamiento contra prueba.** <¿Hay diferencia? ¿Por qué? ¿Sobreajuste o generalización?>
+Si, hay diferencia entre entrenamiento y prueba ya que durante la prueba suben todas las métricas en comparación al entrenamiento, excepto la especificidad, porque, de los 2 pacientes que no presentan ACV, uno fue una falsa alarma.
+Al tener solamente 6 casos de prueba esto hace que, como solo hay un mal resultado, la especificidad baja un 25%.
 
 ## 4. El error más caro
+El falso negativo es el error más grave, porque implica no detectar a un paciente que realmente está cursando un ACV, lo que podría retrasar su atención y hacerle perder la ventana de tratamiento. En cambio, un falso positivo puede generar una tomografía innecesaria y ocupar recursos hospitalarios.
 
-<¿Es peor el falso positivo o el falso negativo en su problema? ¿Por qué, según la ficha? ¿Qué cambiaron en el sistema para cometer menos ese error?>
+Para reducir los falsos negativos, priorizamos la sensibilidad como métrica principal y ajustamos la neurona para favorecer la detección de los casos positivos, aceptando la posibilidad de tener algunos falsos positivos.
 
 ## 5. ¿Comparado contra qué?
 
-**Línea base trivial.** <Qué resultado saca un sistema que responde siempre lo mismo, y cómo se compara el suyo.>
+**Línea base trivial.**
+
+Como línea base trivial, consideramos un sistema que responde siempre NO, es decir, que clasifica a todos los pacientes como si no estuvieran cursando un ACV.
+
+En nuestros 14 casos de entrenamiento, esta estrategia habría acertado 8 de 14 casos, obteniendo una exactitud del 57,14 %. Sin embargo, su sensibilidad sería del 0 %, porque no detectaría ninguno de los pacientes que realmente presentan un ACV.
+
+Nuestro perceptrón obtuvo una exactitud del 78,6 % y una sensibilidad del 83,3 % en entrenamiento, por lo que supera a la línea base y resulta más adecuado para nuestro objetivo de detectar los casos positivos.
 
 | Checklist (Clase 6) | Respuesta |
 |---|---|
-| ¿Qué datos? | <> |
-| ¿Qué métrica? | <> |
-| ¿Comparado contra qué? | <> |
-| ¿Quién lo midió? | <> |
+| ¿Qué datos? | 20 casos inventados, con tres variables: asimetría facial, debilidad en un brazo y dificultad para hablar. Se utilizaron 14 para entrenamiento y 6 para prueba. |
+| ¿Qué métrica? | Sensibilidad como métrica principal, y exactitud, precisión y especificidad como métricas complementarias. |
+| ¿Comparado contra qué? | Una línea base trivial que siempre responde NO y nuestro perceptrón. |
+| ¿Quién lo midió? | Nosotros, como integrantes del equipo, mediante matrices de confusión y el cálculo de las métricas en entrenamiento y prueba. |
 
 ## 6. Riesgo: el camino completo
 
-<Datos → modelo → decisión → consecuencia aplicado a su caso. Al menos un riesgo concreto.>
+Datos: El sistema recibe tres síntomas del paciente: asimetría facial, debilidad en un brazo y dificultad para hablar. Un riesgo es que los valores ingresados sean incorrectos o no representen adecuadamente los síntomas reales.
+
+Modelo: La neurona procesa esos datos utilizando los pesos y el sesgo obtenidos durante el entrenamiento. Como fue entrenada con pocos casos inventados, puede no generalizar correctamente a situaciones reales.
+
+Decisión: El sistema clasifica al paciente como SÍ o NO. El principal riesgo es un falso negativo: que clasifique como NO a un paciente que realmente está cursando un ACV.
+
+Consecuencia: Esto podría retrasar la derivación a tomografía y afectar las posibilidades de recibir un tratamiento oportuno.
+
+Otro riesgo a considerar sería la posibilidad de que las falsas alarmas terminen en demoras al sistema y perder recursos.
+
+Por estos motivos, el sistema debe considerarse un ejercicio académico y no una herramienta de diagnóstico médico ni un reemplazo del criterio profesional.
 
 ## 7. Bitácora
 
@@ -108,7 +134,9 @@ En colab, para probar un caso nuevo, podes modificar los valores de Asimetría f
 |---|---|---|---|
 | 1 | Una guía sobre el PEAS | Aceptamos parcialmente la respuesta de la IA de Mastronardi tras compararlas| Rechazamos las clasificaciones del entorno y Actuators, adoptamos la versión de Villamil al definir con más precisión lo que debe hacer la neurona|
 | 2 | Métrica y Objetivo | Aceptamos el objetivo de Mastronardi porque se alinea con las bases de un proyecto de salud, también la explicación de la relación entre ambos conceptos, al alinearse con la idea de la cátedra | Rechazamos métrica Matronardi y usamos la de Villamil porque hace énfasis en el peso del falso negativo| 
-| 3 | Crear el sistema | 
+| 3 | Formula de la neurona a partir de los casos de entrenamiento | La versión de Villamil porque los parámetros eran más pequeños y nos resultó más cómodo | La versión de Mastronardi porque ambas tenian la misma sensibilidad, la cual es la métrica más importante en nuestro caso. |
+| 4 | Realizar la planilla de los casos de entrenamiento con la fórmula, la cual completó los resultados a partir de las cuentas | El código para Colab al ejecutarse correctamente y aportarnos las métricas necesarias. Lo usamos como primera prueba o intento. | Rechazamos la primer versión que nos dió porque las métricas estaban demasiado sesgadas para la exactitud, se ajustaba demasiado al conjunto de datos que proporcionamos y nos dió 100% en cada métrica al entrenar y probar los datos. No es aceptable.
+| 5 | 
 
 **Corridas contra el evaluador**
 
